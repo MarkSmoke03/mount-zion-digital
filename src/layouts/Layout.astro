@@ -1,0 +1,119 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title} | Mount Zion Christian Centre Kitwe - Transforming Lives</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Kept base global rules in standard CSS */
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, .serif-heading {
+      font-family: 'Playfair Display', serif;
+    }
+  </style>
+</head>
+<body class="m-0 p-0 bg-white text-gray-800">
+  <!-- OFFICIAL MTZ STICKY NAVIGATION -->
+  <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b-[3px] border-[#1a365d]">
+    <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center flex-wrap gap-4">
+      
+      <!-- LOGO INTEGRATION -->
+      <a href="/" class="flex items-center gap-3 no-underline">
+        <img src="/images/mtz-logo.png" alt="Mount Zion Logo" class="h-12 w-auto object-contain" />
+        <div>
+          <span class="font-sans text-gray-900 font-extrabold text-xl tracking-tight block leading-none">Mount Zion</span>
+          <span class="font-sans text-gray-500 text-[11px] tracking-widest uppercase block mt-1 font-semibold">Christian Centre • Kitwe</span>
+        </div>
+      </a>
+
+      <!-- Main Navigation Links -->
+      <div class="flex gap-7 items-center flex-wrap">
+        <a href="/" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Home</a>
+        <a href="/ministries" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Get Connected</a>
+        <a href="/prayer-hub" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Prayer & Care</a>
+        <a href="/connect" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Connect With Us</a>
+        <a href="/plan-your-visit" class="text-white text-sm font-semibold py-2.5 px-6 rounded bg-[#1a365d] hover:bg-[#11223f] transition-colors no-underline">Join Us for Worship</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN HOUSING LAYER -->
+  <main class="pt-[85px] min-h-[85vh]">
+    <slot />
+  </main>
+
+  <!-- OFFICIAL MTZ FOOTER -->
+  <footer class="bg-gray-900 text-gray-50 pt-20 pb-8 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+      
+      <!-- Vision & Mission -->
+      <div>
+        <h3 class="font-sans text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Our Vision & Mission</h3>
+        <p class="text-gray-400 text-sm leading-relaxed mb-4">
+          <strong class="text-gray-200">Vision:</strong> To preach the Prophetic Now Word of God that uplifts, heals and provides practical solutions for life.
+        </p>
+        <p class="text-gray-400 text-sm leading-relaxed m-0">
+          <strong class="text-gray-200">Mission:</strong> To be a christ-centered Church, carrying the manifest presence of God that permanently sets people free, to actualize their purpose and corporately fulfill kingdom assignment.
+        </p>
+      </div>
+
+      <!-- Service Times -->
+      <div>
+        <h3 class="font-sans text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Join Us for Worship</h3>
+        <ul class="list-none p-0 m-0 text-sm leading-loose">
+          <li class="mb-3 border-b border-white/10 pb-2">
+            <strong class="text-white block">Sunday Morning Service</strong>
+            <span class="text-gray-400">09:00 AM</span>
+          </li>
+          <li class="mb-3 border-b border-white/10 pb-2">
+            <strong class="text-white block">Wednesday Midweek Service</strong>
+            <span class="text-gray-400">18:00 PM</span>
+          </li>
+          <li class="mb-3 pb-2">
+            <strong class="text-white block">Saturday Intercession</strong>
+            <span class="text-gray-400">20:30 PM</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kitwe Branch Info -->
+      <div>
+        <h3 class="font-sans text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Kitwe Branch Details</h3>
+        <p class="text-gray-400 text-sm leading-relaxed mt-0 mb-4">
+          <strong class="text-gray-200 block mb-1">Branch Pastor:</strong>
+          Pastor Morgan Bwalya
+        </p>
+        <p class="text-gray-400 text-sm leading-relaxed mt-0 mb-5">
+          <strong class="text-gray-200 block mb-1">Location:</strong>
+          Mount Zion Christian Center, Kitwe, Zambia.
+        </p>
+        <a href="tel:+260962216561" class="text-white text-base font-semibold no-underline inline-flex items-center gap-2 bg-white/5 py-2.5 px-4 rounded border border-white/10 hover:bg-white/10 transition-colors">
+          Call Us: +260 962 216 561
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Copyright -->
+    <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 text-left text-sm text-gray-500 flex justify-between flex-wrap gap-4">
+      <p class="m-0">&copy; 2026 Mount Zion Christian Centre. All Rights Reserved.</p>
+      <p class="m-0">Transforming Lives to Transform the World.</p>
+    </div>
+  </footer>
+</body>
+</html>

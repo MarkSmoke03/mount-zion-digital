@@ -1,0 +1,59 @@
+---
+// Renders a QR code as inline SVG, generated at BUILD TIME (this code runs
+// on the server/Node during `astro build`, never in the visitor's browser).
+// Ships zero client-side JavaScript - the output is plain, static markup.
+//
+// `url` must be a full absolute URL ("https://..."), since a phone's camera
+// app has no page to resolve a relative path against. Pass one in via
+// `new URL('/some-page', Astro.site)`, which needs `site` set in
+// astro.config.mjs.
+import QRCode from 'qrcode';
+
+interface Props {
+  url: string;
+  /** Rendered width & height in pixels. Defaults to 200 for inline use;
+   * pass something like 500+ for a code meant to be scanned from across a room. */
+  size?: number;
+  /** Optional caption printed under the code. */
+  caption?: string;
+}
+
+const { url, size = 200, caption } = Astro.props;
+
+if (import.meta.env.DEV && !url.startsWith('http')) {
+  console.warn(`[QRCode] "${url}" doesn't look like an absolute URL - it may not resolve when scanned.`);
+}
+
+const svg = await QRCode.toString(url, {
+  type: 'svg',
+  errorCorrectionLevel: 'H', // most tolerant level - helps when scanned off a screen/projector, at an angle, or from a printed bulletin
+  margin: 2,
+  color: {
+    dark: '#1a365dff', // navy, matches the site's brand color
+    light: '#ffffffff', // solid (non-transparent) white so the code stays scannable regardless of what it's placed on
+  },
+});
+---
+
+<figure class="inline-flex flex-col items-center gap-3 m-0">
+  <div
+    class="qr-wrap bg-white p-4 rounded-lg shadow-md border border-gray-200"
+    style={`width: ${size}px; height: ${size}px;`}
+    role="img"
+    aria-label={`QR code - scan to open ${url}`}
+  >
+    <Fragment set:html={svg} />
+  </div>
+  {caption && <figcaption class="text-sm text-gray-600 text-center max-w-[220px]">{caption}</figcaption>}
+</figure>
+
+<style>
+  /* The library's SVG output doesn't know about the `size` prop, so we force
+     it to fill the sized wrapper above rather than trying to match node-qrcode's
+     internal width/height/viewBox math by hand. */
+  .qr-wrap :global(svg) {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+import QRCode from '../components/QRCode.astro';
+
+// Astro.site comes from the `site` value in astro.config.mjs.
+const connectUrl = new URL('/connect', Astro.site);
+---
+
+<Layout title="Home">
+  
+  <!-- OFFICIAL MTZ HERO SECTION -->
+  <section class="relative h-[80vh] min-h-[600px] w-full flex items-center justify-center bg-gray-900">
+    
+    <img
+      src="/images/daughters-of-zion.jpg"
+      alt="Mount Zion Kitwe Congregation"
+      class="absolute inset-0 w-full h-full object-cover object-[center_30%] z-0 opacity-40"
+    />
+
+    <div class="relative z-10 max-w-4xl text-center px-6">
+      <h1 class="text-5xl md:text-6xl lg:text-[72px] font-bold mb-5 leading-tight text-white">
+        Transforming Lives to<br/>Transform the World.
+      </h1>
+      <p class="font-sans text-lg md:text-xl font-normal max-w-2xl mx-auto mb-10 leading-relaxed text-gray-300">
+        A dynamic bible believing church serving the spiritual needs of people from all walks of life. Under the leadership of Pastor Morgan Bwalya, join us in Kitwe to experience the manifest presence of God.
+      </p>
+      <div class="flex gap-4 justify-center flex-wrap">
+        <a href="/plan-your-visit" class="bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px] transition-colors">
+          Join Us This Sunday
+        </a>
+        <a href="/ministries" class="bg-transparent hover:bg-white/10 text-white border-2 border-white font-semibold no-underline py-3 px-7 rounded text-[15px] transition-colors">
+          Learn More About Us
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- A CHURCH THAT FEELS LIKE HOME -->
+  <section class="max-w-7xl mx-auto my-24 px-6 text-center">
+    <span class="text-sm font-bold text-navy uppercase tracking-widest block mb-4">
+      Welcome to the Family
+    </span>
+    <h2 class="text-4xl md:text-5xl text-gray-900 mb-6 font-bold leading-tight">
+      A Church That Feels Like Home.
+    </h2>
+    <p class="max-w-3xl mx-auto mb-10 text-gray-600 text-lg leading-relaxed font-light">
+      At Mount Zion Christian Centre, we teach biblical principles that <strong class="font-bold">unlock destinies</strong> and lead God's people into key and strategic positions of influence. Whether you're seeking spiritual growth, community, or a place to serve, you'll find your home here with us in Kitwe.
+    </p>
+    
+    <!-- Core Scriptures Block -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
+      <div class="bg-gray-50 p-10 rounded-lg border-l-4 border-navy">
+        <h3 class="text-xl text-gray-900 mt-0 mb-4 font-bold">Hebrews 12:22-24</h3>
+        <p class="text-gray-600 italic leading-relaxed m-0 text-[15px]">
+          "But you have come to Mount Zion and to the city of the living God, the heavenly Jerusalem... to the general assembly and the church of the firstborn who are registered in heaven."
+        </p>
+      </div>
+      <div class="bg-gray-50 p-10 rounded-lg border-l-4 border-navy">
+        <h3 class="text-xl text-gray-900 mt-0 mb-4 font-bold">Obadiah 1:17</h3>
+        <p class="text-gray-600 italic leading-relaxed m-0 text-[15px]">
+          "But on Mount Zion there shall be deliverance, And there shall be holiness; The house of Jacob shall possess their possessions."
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE WORSHIP HUB -->
+  <section class="bg-gray-100 py-24 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div>
+        <h2 class="text-4xl text-gray-900 m-0 mb-5 font-bold leading-tight">
+          Experience powerful, life-changing messages from God's Word.
+        </h2>
+        <p class="text-gray-600 text-base leading-relaxed mb-8">
+          Feed your spirit with the Prophetic Now Word. We stream our Kitwe branch services live to equip believers educationally, politically, economically, and spiritually.
+        </p>
+        <a href="https://web.facebook.com/profile.php?id=100079471674687" target="_blank" rel="noopener noreferrer" class="inline-block bg-navy hover:bg-navy-dark text-white py-3.5 px-7 rounded no-underline font-semibold text-sm transition-colors">
+          Watch Latest Sermons
+        </a>
+      </div>
+
+      <!-- Refined Iframe Target -->
+      <div class="bg-white p-5 rounded-lg shadow-xl flex justify-center items-center w-full">
+        <!-- Max-width matches Facebook's standard 500px rendering limit -->
+        <div class="w-full max-w-[500px] flex justify-center overflow-hidden rounded">
+          <iframe 
+            src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fweb.facebook.com%2Fprofile.php%3Fid%3D100079471674687&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false" 
+            width="500"
+            height="500"
+            class="w-full border-none max-w-[500px]"
+            scrolling="no" 
+            frameborder="0" 
+            allowfullscreen="true" 
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAY CONNECTED / QR -->
+  <section class="max-w-7xl mx-auto my-24 px-6">
+    <div class="bg-gray-900 rounded-2xl px-8 py-16 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div>
+        <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-4">
+          New Here?
+        </span>
+        <h2 class="text-4xl text-white mb-5 font-bold leading-tight">
+          Let's get you connected.
+        </h2>
+        <p class="text-gray-300 text-lg leading-relaxed mb-8 max-w-md">
+          Scan the code, or follow the link, and tell us a little about yourself. Someone from the Mount Zion family will reach out.
+        </p>
+        <a href="/connect" class="inline-block bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px] transition-colors">
+          {connectUrl.href}
+        </a>
+      </div>
+      <div class="flex justify-center md:justify-end">
+        <QRCode url={connectUrl.href} caption="Scan to open Connect With Us" size={200} />
+      </div>
+    </div>
+  </section>
+
+</Layout>
