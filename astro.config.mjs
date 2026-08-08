@@ -7,6 +7,6 @@ export default defineConfig({
   // under the main organization's domain. Needed so the QR code component can
   // build an absolute, scannable URL - also powers canonical/OG/sitemap URLs
   // if you add those later.
-  site: "https://REPLACE-WITH-YOUR-DOMAIN.example",
+  site: "https://mountzionkiitwe.netlify.app",
   integrations: [tailwind()],
 });

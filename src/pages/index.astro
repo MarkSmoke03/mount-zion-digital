@@ -80,7 +80,7 @@ const connectUrl = new URL('/connect', Astro.site);
       </div>
 
       <!-- Refined Iframe Target -->
-      <div class="bg-white p-5 rounded-lg shadow-xl flex justify-center items-center w-full">
+      <div class="bg-white p-5 rounded-lg shadow-xl flex flex-col justify-center items-center w-full">
         <!-- Max-width matches Facebook's standard 500px rendering limit -->
         <div class="w-full max-w-[500px] flex justify-center overflow-hidden rounded">
           <iframe 
@@ -94,8 +94,10 @@ const connectUrl = new URL('/connect', Astro.site);
             allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
           </iframe>
         </div>
+        <p class="text-sm text-gray-500 text-center mt-3 mb-0">
+          Not loading? <a href="https://web.facebook.com/profile.php?id=100079471674687" target="_blank" rel="noopener noreferrer" class="text-navy hover:underline font-medium">Visit our Facebook Page directly →</a>
+        </p>
       </div>
-    </div>
   </section>
 
   <!-- STAY CONNECTED / QR -->

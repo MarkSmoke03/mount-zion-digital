@@ -3,6 +3,7 @@ interface Props {
   title: string;
 }
 const { title } = Astro.props;
+const currentYear = new Date().getFullYear();
 ---
 
 <!DOCTYPE html>
@@ -29,9 +30,9 @@ const { title } = Astro.props;
 </head>
 <body class="m-0 p-0 bg-white text-gray-800">
   <!-- OFFICIAL MTZ STICKY NAVIGATION -->
-  <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b-[3px] border-[#1a365d]">
-    <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center flex-wrap gap-4">
-      
+  <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b-[3px] border-navy">
+    <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center">
+
       <!-- LOGO INTEGRATION -->
       <a href="/" class="flex items-center gap-3 no-underline">
         <img src="/images/mtz-logo.png" alt="Mount Zion Logo" class="h-12 w-auto object-contain" />
@@ -41,16 +42,70 @@ const { title } = Astro.props;
         </div>
       </a>
 
-      <!-- Main Navigation Links -->
-      <div class="flex gap-7 items-center flex-wrap">
-        <a href="/" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Home</a>
-        <a href="/ministries" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Get Connected</a>
-        <a href="/prayer-hub" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Prayer & Care</a>
-        <a href="/connect" class="text-gray-700 hover:text-[#1a365d] no-underline text-sm font-semibold transition-colors">Connect With Us</a>
-        <a href="/plan-your-visit" class="text-white text-sm font-semibold py-2.5 px-6 rounded bg-[#1a365d] hover:bg-[#11223f] transition-colors no-underline">Join Us for Worship</a>
+      <!-- Main Navigation Links (desktop only) -->
+      <div class="hidden md:flex gap-7 items-center">
+        <a href="/" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Home</a>
+        <a href="/ministries" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Get Connected</a>
+        <a href="/prayer-hub" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Prayer & Care</a>
+        <a href="/connect" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Connect With Us</a>
+        <a href="/plan-your-visit" class="text-white text-sm font-semibold py-2.5 px-6 rounded bg-navy hover:bg-navy-dark transition-colors no-underline">Join Us for Worship</a>
       </div>
+
+      <!-- Mobile menu toggle -->
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        class="md:hidden p-2 -mr-2"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="hidden h-6 w-6 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile menu (collapsed by default, toggled by the script below) -->
+    <div id="mobile-menu" class="hidden md:hidden flex-col bg-white border-t border-gray-100 px-6 pb-4">
+      <a href="/" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Home</a>
+      <a href="/ministries" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Get Connected</a>
+      <a href="/prayer-hub" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Prayer & Care</a>
+      <a href="/connect" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Connect With Us</a>
+      <a href="/plan-your-visit" class="block text-center mt-3 text-white text-sm font-semibold py-2.5 px-6 rounded bg-navy hover:bg-navy-dark transition-colors no-underline">Join Us for Worship</a>
     </div>
   </nav>
+
+  <script>
+    const toggle = document.getElementById('mobile-menu-toggle') as HTMLButtonElement;
+    const menu = document.getElementById('mobile-menu') as HTMLElement;
+    const iconOpen = document.getElementById('icon-open') as HTMLElement;
+    const iconClose = document.getElementById('icon-close') as HTMLElement;
+
+    if (toggle && menu && iconOpen && iconClose) {
+      const setOpen = (open: boolean) => {
+        menu.classList.toggle('hidden', !open);
+        menu.classList.toggle('flex', open);
+        iconOpen.classList.toggle('hidden', open);
+        iconClose.classList.toggle('hidden', !open);
+        toggle.setAttribute('aria-expanded', String(open));
+      };
+
+      toggle.addEventListener('click', () => {
+        setOpen(menu.classList.contains('hidden'));
+      });
+
+      // If the window is resized/rotated past the desktop breakpoint while
+      // the mobile menu is open, close it so it can't get stuck open behind
+      // the desktop nav (768px matches Tailwind's default `md:` breakpoint).
+      window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+        if (e.matches) setOpen(false);
+      });
+    }
+  </script>
 
   <!-- MAIN HOUSING LAYER -->
   <main class="pt-[85px] min-h-[85vh]">
@@ -111,7 +166,7 @@ const { title } = Astro.props;
 
     <!-- Copyright -->
     <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 text-left text-sm text-gray-500 flex justify-between flex-wrap gap-4">
-      <p class="m-0">&copy; 2026 Mount Zion Christian Centre. All Rights Reserved.</p>
+      <p class="m-0">&copy; {currentYear} Mount Zion Christian Centre. All Rights Reserved.</p>
       <p class="m-0">Transforming Lives to Transform the World.</p>
     </div>
   </footer>
