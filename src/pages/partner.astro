@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Partner With Us">
+
+  <section class="bg-gray-900 text-white py-20 px-6 text-center">
+    <p class="text-gold text-sm font-semibold tracking-widest uppercase mb-3">Church Land Project</p>
+    <h1 class="text-4xl md:text-5xl mb-4 font-bold">Partner With Us</h1>
+    <p class="max-w-2xl mx-auto text-gray-400 text-lg leading-relaxed">
+      The Lord has placed it upon our hearts to build Him a house, and we invite you to join us in this divine calling. Partner with us in the purchase of land for this purpose and be a part of the blessing as we come together to build the Lord's house.
+    </p>
+  </section>
+
+  <section class="max-w-4xl mx-auto my-16 px-6">
+    <img
+      src="/images/partner-land-project.jpg"
+      alt="Partner With Us - Church Land Project"
+      class="w-full rounded-lg shadow-md mb-16"
+    />
+
+    <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+      <div class="bg-navy text-white text-center py-4 px-6">
+        <h2 class="text-xl font-bold m-0">For Partnership</h2>
+      </div>
+
+      <div class="p-8 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <div>
+          <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">FNB Account No.</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="copy-value text-2xl font-bold text-gray-900 tracking-wide" data-copy="63022071326">63022071326</span>
+            <button type="button" class="copy-btn text-navy hover:text-navy-dark text-sm font-semibold transition-colors" data-copy="63022071326">Copy</button>
+          </div>
+          <p class="text-gray-600 text-sm mt-2 mb-0">Swift Code: <span class="font-semibold text-gray-800">FIRNZMLX</span></p>
+        </div>
+
+        <div>
+          <p class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">MTN Mobile Money</p>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="copy-value text-2xl font-bold text-gray-900 tracking-wide" data-copy="+260762165335">+260 762 165 335</span>
+            <button type="button" class="copy-btn text-navy hover:text-navy-dark text-sm font-semibold transition-colors" data-copy="+260762165335">Copy</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bg-gray-50 border-t border-gray-100 text-center py-4 px-6">
+        <p class="text-gray-600 text-sm m-0">Please use reference: <span class="font-semibold text-gray-900">"LAND"</span></p>
+      </div>
+    </div>
+
+    <p class="text-center text-gray-500 text-sm mt-8">
+      Questions about the land project? <a href="/connect" class="text-navy font-semibold no-underline hover:underline">Reach out to us</a> and we'll be glad to share more.
+    </p>
+  </section>
+
+  <script>
+    document.querySelectorAll<HTMLButtonElement>('.copy-btn').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const value = btn.dataset.copy;
+        if (!value) return;
+
+        try {
+          await navigator.clipboard.writeText(value);
+          const original = btn.textContent;
+          btn.textContent = 'Copied!';
+          setTimeout(() => {
+            btn.textContent = original;
+          }, 1500);
+        } catch (err) {
+          console.error('Clipboard write failed:', err);
+        }
+      });
+    });
+  </script>
+
+</Layout>
