@@ -1,158 +1,113 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+interface Ministry {
+  id: string;
+  name: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  /** Posters are shown whole (letterboxed) instead of cropped like photos. */
+  poster?: boolean;
+}
+
+const ministries: Ministry[] = [
+  {
+    id: 'garage',
+    name: 'The Garage (Youth)',
+    description:
+      'Empowering the next generation. High-energy worship and relevant teaching for young people. The Garage is church like you have never experienced before.',
+    image: '/images/garage-youth.jpg',
+    imageAlt: 'Young people from The Garage youth ministry',
+  },
+  {
+    id: 'womens',
+    name: "Women's Ministry",
+    description:
+      'Growing together in faith. Equipping our daughters of Zion to fulfill their strategic roles in family, governance, and commerce.',
+    image: '/images/daughters-of-zion.jpg',
+    imageAlt: "Members of the Women's Ministry worshipping together",
+  },
+  {
+    id: 'mens',
+    name: "Men's Ministry",
+    description:
+      'Building godly men. His Men is dedicated to raising leaders who provide spiritual foundation and discipleship for their homes and communities.',
+    image: '/images/mens-ministry.jpg',
+    imageAlt: "Members of the Men's Ministry gathered outdoors",
+  },
+  {
+    id: 'nextgen',
+    name: 'Next Generation',
+    description:
+      'Raising the next leaders in Christ. Grounding the youngest among us in biblical truth to permanently set them on the path of kingdom assignment.',
+    image: '/images/next-gen.jpg',
+    imageAlt: 'Children in the Next Generation ministry',
+  },
+  {
+    id: 'community',
+    name: 'Community Life and Care',
+    description:
+      'Building a supportive church family. Providing practical solutions, fellowship, and care to ensure nobody walks the journey of faith alone.',
+    image: '/images/community-life.jpg',
+    imageAlt: 'Church families sharing fellowship',
+  },
+  {
+    id: 'spiritual',
+    name: 'Spiritual Foundation',
+    description:
+      'Grounding lives in biblical truth. Through classes like "Days of Rain", we equip members with the necessary wisdom for ministry at our local assembly.',
+    image: '/images/days-of-rain-poster.jpg',
+    imageAlt: 'Days of Rain discipleship class poster',
+    poster: true,
+  },
+];
 ---
 
-<Layout title="Get Connected">
+<Layout
+  title="Get Connected"
+  description="Find your place at Mount Zion Christian Centre Kitwe: The Garage youth ministry, Women's and Men's Ministries, Next Generation, Community Life and Care, and Spiritual Foundation."
+>
 
-  <section class="bg-gray-900 text-white py-20 px-6 text-center">
+  <section class="bg-gray-900 text-white py-16 md:py-20 px-6 text-center">
     <h1 class="text-4xl md:text-5xl mb-4 font-bold">Get Connected</h1>
     <p class="max-w-2xl mx-auto text-gray-400 text-lg leading-relaxed">
       Grounding lives in biblical truth. Whether you're seeking to serve or to grow, there is a place for you in the Mount Zion family.
     </p>
   </section>
 
-  <!-- MTZ MINISTRY GRID -->
-  <section class="max-w-7xl mx-auto my-20 px-6">
-    <div class="grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-10">
-
-      <!-- Ministry 1 -->
-      <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
-        <img src="/images/garage-youth.jpg" alt="The Garage (Youth)" loading="lazy" class="w-full h-[200px] object-cover" />
-        <div class="p-8">
-          <h2 class="text-2xl mb-3 text-gray-900 font-bold">The Garage (Youth)</h2>
-          <p class="text-gray-600 text-[15px] leading-relaxed mb-0">
-            Empowering the next generation. High-energy worship and relevant teaching for young people. The Garage is church like you have never experienced before.
-          </p>
-          <div id="detail-garage" class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
-            <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
-              Want to get plugged into this ministry? Reach out through our Connect page and we'll point you in the right direction.
-            </p>
-            <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
+  <section class="max-w-7xl mx-auto my-16 md:my-20 px-6">
+    <!-- min(100%, 320px) keeps cards from overflowing narrow phone screens -->
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,320px),1fr))] gap-8 md:gap-10 items-start">
+      {ministries.map((m) => (
+        <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
+          <img
+            src={m.image}
+            alt={m.imageAlt}
+            loading="lazy"
+            decoding="async"
+            width="800"
+            height="450"
+            class:list={['w-full h-[200px]', m.poster ? 'object-contain bg-gray-50' : 'object-cover']}
+          />
+          <div class="p-6 md:p-8">
+            <h2 class="text-2xl mb-3 text-gray-900 font-bold">{m.name}</h2>
+            <p class="text-gray-600 text-[15px] leading-relaxed mb-0">{m.description}</p>
+            <div id={`detail-${m.id}`} class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
+              <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
+                Want to get plugged into {m.name}? Reach out through our Connect page and we'll point you in the right direction.
+              </p>
+              <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
+            </div>
+            <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls={`detail-${m.id}`}>
+              <span class="ministry-toggle-label">Tap to learn more</span>
+              <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
           </div>
-          <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls="detail-garage">
-            <span class="ministry-toggle-label">Tap to learn more</span>
-            <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
         </div>
-      </div>
-
-      <!-- Ministry 2 -->
-      <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
-        <img src="/images/daughters-of-zion.jpg" alt="Women's Ministry" loading="lazy" class="w-full h-[200px] object-cover" />
-        <div class="p-8">
-          <h2 class="text-2xl mb-3 text-gray-900 font-bold">Women's Ministry</h2>
-          <p class="text-gray-600 text-[15px] leading-relaxed mb-0">
-            Growing together in faith. Equipping our daughters of Zion to fulfill their strategic roles in family, governance, and commerce.
-          </p>
-          <div id="detail-womens" class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
-            <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
-              Want to get plugged into this ministry? Reach out through our Connect page and we'll point you in the right direction.
-            </p>
-            <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
-          </div>
-          <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls="detail-womens">
-            <span class="ministry-toggle-label">Tap to learn more</span>
-            <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Ministry 3 -->
-      <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
-        <img src="/images/mens-ministry.jpg" alt="Men's Ministry" loading="lazy" class="w-full h-[200px] object-cover" />
-        <div class="p-8">
-          <h2 class="text-2xl mb-3 text-gray-900 font-bold">Men's Ministry</h2>
-          <p class="text-gray-600 text-[15px] leading-relaxed mb-0">
-            Building godly men. His Men is dedicated to raising leaders who provide spiritual foundation and discipleship for their homes and communities.
-          </p>
-          <div id="detail-mens" class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
-            <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
-              Want to get plugged into this ministry? Reach out through our Connect page and we'll point you in the right direction.
-            </p>
-            <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
-          </div>
-          <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls="detail-mens">
-            <span class="ministry-toggle-label">Tap to learn more</span>
-            <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Ministry 4 -->
-      <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
-        <img src="/images/next-gen.jpg" alt="Emerging Generation" loading="lazy" class="w-full h-[200px] object-cover" />
-        <div class="p-8">
-          <h2 class="text-2xl mb-3 text-gray-900 font-bold">Emerging Generation</h2>
-          <p class="text-gray-600 text-[15px] leading-relaxed mb-0">
-            Raising the next leaders in Christ. Grounding the youngest among us in biblical truth to permanently set them on the path of kingdom assignment.
-          </p>
-          <div id="detail-emerging" class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
-            <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
-              Want to get plugged into this ministry? Reach out through our Connect page and we'll point you in the right direction.
-            </p>
-            <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
-          </div>
-          <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls="detail-emerging">
-            <span class="ministry-toggle-label">Tap to learn more</span>
-            <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Ministry 5 -->
-      <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
-        <img src="/images/community-life.jpg" alt="Community Life and Care" loading="lazy" class="w-full h-[200px] object-cover" />
-        <div class="p-8">
-          <h2 class="text-2xl mb-3 text-gray-900 font-bold">Community Life and Care</h2>
-          <p class="text-gray-600 text-[15px] leading-relaxed mb-0">
-            Building a supportive church family. Providing practical solutions, fellowship, and care to ensure nobody walks the journey of faith alone.
-          </p>
-          <div id="detail-community" class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
-            <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
-              Want to get plugged into this ministry? Reach out through our Connect page and we'll point you in the right direction.
-            </p>
-            <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
-          </div>
-          <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls="detail-community">
-            <span class="ministry-toggle-label">Tap to learn more</span>
-            <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Ministry 6 -->
-      <div class="ministry-card cursor-pointer border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-200 hover:shadow-lg hover:border-navy/30">
-        <img src="/images/days-of-rain-poster.png" alt="Days of Rain discipleship class poster" loading="lazy" class="w-full h-[200px] object-contain bg-gray-50" />
-        <div class="p-8">
-          <h2 class="text-2xl mb-3 text-gray-900 font-bold">Spiritual Foundation</h2>
-          <p class="text-gray-600 text-[15px] leading-relaxed mb-0">
-            Grounding lives in biblical truth. Through classes like "Days of Rain", we equip members with the necessary wisdom for ministry at our local assembly.
-          </p>
-          <div id="detail-spiritual" class="ministry-detail hidden mt-5 pt-5 border-t border-gray-100">
-            <p class="text-gray-600 text-[15px] leading-relaxed mb-4">
-              Want to get plugged into this ministry? Reach out through our Connect page and we'll point you in the right direction.
-            </p>
-            <a href="/connect" class="text-navy font-semibold no-underline hover:underline text-sm transition-colors">Get in touch →</a>
-          </div>
-          <button type="button" class="ministry-toggle mt-4 flex items-center gap-1.5 text-navy font-semibold text-sm transition-colors hover:text-navy-dark" aria-expanded="false" aria-controls="detail-spiritual">
-            <span class="ministry-toggle-label">Tap to learn more</span>
-            <svg class="ministry-chevron w-4 h-4 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
+      ))}
     </div>
   </section>
 
@@ -178,13 +133,13 @@ import Layout from '../layouts/Layout.astro';
         setExpanded(toggleBtn.getAttribute('aria-expanded') !== 'true');
       };
 
+      // The whole card is a large tap target; the button is the
+      // keyboard/screen-reader control, so stop it double-toggling.
       card.addEventListener('click', toggle);
-
       toggleBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         toggle();
       });
-
       detail.querySelector('a')?.addEventListener('click', (e) => e.stopPropagation());
     });
   </script>

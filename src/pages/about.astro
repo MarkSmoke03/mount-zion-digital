@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { church, pastorProfile } from '../data/church';
+
+const initials = pastorProfile.name
+  .replace(/^Pastor\s+/, '')
+  .split(/\s+/)
+  .map((w) => w[0])
+  .join('');
+---
+
+<Layout
+  title="About Us"
+  description="Meet Pastor Morgan Bwalya and learn about the vision of Mount Zion Christian Centre Kitwe."
+>
+
+  <section class="bg-gray-100 py-16 md:py-20 px-6 text-center">
+    <h1 class="text-4xl md:text-5xl mb-4 text-gray-900 font-bold">About Us</h1>
+    <p class="max-w-2xl mx-auto text-gray-600 text-lg leading-relaxed">
+      A Bible-believing church in Kitwe, serving the spiritual needs of people from all walks of life.
+    </p>
+  </section>
+
+  <!-- MEET OUR PASTOR -->
+  <section class="max-w-5xl mx-auto my-16 md:my-20 px-6 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-10 md:gap-14 items-start">
+    <div class="mx-auto md:mx-0 w-56 md:w-full">
+      {pastorProfile.photo ? (
+        <img
+          src={pastorProfile.photo}
+          alt={pastorProfile.name}
+          width="560"
+          height="700"
+          class="w-full h-auto aspect-[4/5] object-cover rounded-lg shadow-md"
+        />
+      ) : (
+        <div class="w-full aspect-[4/5] rounded-lg bg-navy flex items-center justify-center shadow-md" role="img" aria-label={`Photo of ${pastorProfile.name} coming soon`}>
+          <span class="text-white/90 text-6xl font-bold tracking-wide" aria-hidden="true">{initials}</span>
+        </div>
+      )}
+    </div>
+
+    <div>
+      <span class="text-sm font-bold text-navy uppercase tracking-widest block mb-3">Meet Our Pastor</span>
+      <h2 class="serif-heading text-3xl md:text-4xl text-gray-900 mt-0 mb-2 font-bold">{pastorProfile.name}</h2>
+      <p class="text-gray-500 mt-0 mb-6">{pastorProfile.role}</p>
+
+      {pastorProfile.bio.length > 0 ? (
+        pastorProfile.bio.map((para) => (
+          <p class="text-gray-700 text-lg leading-relaxed mt-0 mb-4">{para}</p>
+        ))
+      ) : (
+        <p class="text-gray-500 text-lg leading-relaxed italic m-0">
+          Pastor Morgan's full profile is coming soon.
+        </p>
+      )}
+
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/plan-your-visit" class="bg-navy hover:bg-navy-dark text-white font-semibold no-underline py-3 px-6 rounded text-[15px] transition-colors">Join Us This Sunday</a>
+        <a href="/prayer-hub" class="border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold no-underline py-2.5 px-6 rounded text-[15px] transition-colors">Send a Prayer Request</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISION (and Mission once confirmed) -->
+  <section class="bg-gray-900 text-white py-16 md:py-20 px-6">
+    <div class:list={['mx-auto grid gap-10', church.mission ? 'max-w-5xl md:grid-cols-2' : 'max-w-3xl text-center']}>
+      <div>
+        <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-3">Our Vision</span>
+        <p class="serif-heading text-2xl md:text-3xl leading-snug m-0">{church.vision}</p>
+      </div>
+      {church.mission && (
+        <div>
+          <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-3">Our Mission</span>
+          <p class="serif-heading text-2xl md:text-3xl leading-snug m-0">{church.mission}</p>
+        </div>
+      )}
+    </div>
+  </section>
+
+</Layout>
