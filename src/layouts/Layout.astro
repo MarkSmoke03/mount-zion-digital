@@ -1,9 +1,36 @@
 ---
+import { church, services } from '../data/church';
+
 interface Props {
   title: string;
+  description?: string;
+  /** Path to a share image under /public, used for WhatsApp/Facebook link previews. */
+  image?: string;
 }
-const { title } = Astro.props;
+
+const {
+  title,
+  description = 'Mount Zion Christian Centre Kitwe – a Bible-believing church led by Pastor Morgan Bwalya. Join us on Sundays at 09:00 and experience the manifest presence of God.',
+  image = '/images/og-share.jpg',
+} = Astro.props;
+
+const siteName = `${church.name} ${church.branch}`;
+const fullTitle = title === 'Home' ? `${siteName} – Transforming Lives` : `${title} | ${siteName}`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = new URL(image, Astro.site).href;
 const currentYear = new Date().getFullYear();
+
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/about', label: 'About' },
+  { href: '/ministries', label: 'Get Connected' },
+  { href: '/prayer-hub', label: 'Prayer & Care' },
+  { href: '/connect', label: 'Connect With Us' },
+  { href: '/partner', label: 'Partner With Us' },
+];
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? currentPath === '/' : currentPath === href);
 ---
 
 <!DOCTYPE html>
@@ -11,73 +38,103 @@ const currentYear = new Date().getFullYear();
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{title} | Mount Zion Christian Centre Kitwe - Transforming Lives</title>
-  
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+  <meta name="theme-color" content="#1a365d" />
+
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/favicon-192.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Link previews (WhatsApp, Facebook, X) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={imageUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale" content="en_ZM" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Kept base global rules in standard CSS */
     body {
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
     }
+    /* Display serif is reserved for page titles and large section headings.
+       Everything else stays in Inter. */
     h1, .serif-heading {
       font-family: 'Playfair Display', serif;
     }
   </style>
 </head>
 <body class="m-0 p-0 bg-white text-gray-800">
-  <!-- OFFICIAL MTZ STICKY NAVIGATION -->
-  <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b-[3px] border-navy">
-    <div class="max-w-7xl mx-auto py-4 px-6 flex justify-between items-center">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-white focus:text-navy focus:px-4 focus:py-2 focus:rounded focus:shadow">Skip to content</a>
 
-      <!-- LOGO INTEGRATION -->
-      <a href="/" class="flex items-center gap-3 no-underline">
-        <img src="/images/mtz-logo.png" alt="Mount Zion Logo" class="h-12 w-auto object-contain" />
-        <div>
-          <span class="font-sans text-gray-900 font-extrabold text-xl tracking-tight block leading-none">Mount Zion</span>
-          <span class="font-sans text-gray-500 text-[11px] tracking-widest uppercase block mt-1 font-semibold">Christian Centre • Kitwe</span>
+  <!-- STICKY NAVIGATION -->
+  <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b-[3px] border-navy" aria-label="Main">
+    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 flex justify-between items-center gap-4">
+
+      <a href="/" class="flex items-center gap-2.5 sm:gap-3 no-underline min-w-0">
+        <img src="/images/mtz-mark.png" alt="" width="80" height="48" class="h-12 w-auto shrink-0" />
+        <div class="min-w-0">
+          <span class="text-gray-900 font-extrabold text-xl tracking-tight block leading-none">Mount Zion</span>
+          <span class="text-gray-500 text-[11px] tracking-wider sm:tracking-widest uppercase block mt-1 font-semibold whitespace-nowrap">Christian Centre • Kitwe</span>
         </div>
       </a>
 
-      <!-- Main Navigation Links (desktop only) -->
-      <div class="hidden md:flex gap-7 items-center">
-        <a href="/" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Home</a>
-        <a href="/ministries" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Get Connected</a>
-        <a href="/prayer-hub" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Prayer & Care</a>
-        <a href="/connect" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Connect With Us</a>
-        <a href="/partner" class="text-gray-700 hover:text-navy no-underline text-sm font-semibold transition-colors">Partner With Us</a>
-        <a href="/plan-your-visit" class="text-white text-sm font-semibold py-2.5 px-6 rounded bg-navy hover:bg-navy-dark transition-colors no-underline">Join Us for Worship</a>
+      <!-- Desktop links: only from 1280px up, where all seven items fit on one line -->
+      <div class="hidden xl:flex gap-6 items-center">
+        {navLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? 'page' : undefined}
+            class:list={[
+              'no-underline text-sm font-semibold transition-colors whitespace-nowrap hover:text-navy',
+              isActive(link.href) ? 'text-navy' : 'text-gray-700',
+            ]}
+          >{link.label}</a>
+        ))}
+        <a href="/plan-your-visit" class="text-white text-sm font-semibold py-2.5 px-6 rounded bg-navy hover:bg-navy-dark transition-colors no-underline whitespace-nowrap">Join Us for Worship</a>
       </div>
 
-      <!-- Mobile menu toggle -->
       <button
         id="mobile-menu-toggle"
         type="button"
-        class="md:hidden p-2 -mr-2"
-        aria-label="Toggle menu"
+        class="xl:hidden p-2 -mr-2 shrink-0"
+        aria-label="Open menu"
         aria-expanded="false"
         aria-controls="mobile-menu"
       >
-        <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="hidden h-6 w-6 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="hidden h-7 w-7 text-navy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
     </div>
 
-    <!-- Mobile menu (collapsed by default, toggled by the script below) -->
-    <div id="mobile-menu" class="hidden md:hidden flex-col bg-white border-t border-gray-100 px-6 pb-4">
-      <a href="/" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Home</a>
-      <a href="/ministries" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Get Connected</a>
-      <a href="/prayer-hub" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Prayer & Care</a>
-      <a href="/connect" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Connect With Us</a>
-      <a href="/partner" class="block py-3 text-gray-700 hover:text-navy no-underline text-sm font-semibold border-b border-gray-100">Partner With Us</a>
-      <a href="/plan-your-visit" class="block text-center mt-3 text-white text-sm font-semibold py-2.5 px-6 rounded bg-navy hover:bg-navy-dark transition-colors no-underline">Join Us for Worship</a>
+    <div id="mobile-menu" class="hidden xl:hidden flex-col bg-white border-t border-gray-100 px-4 sm:px-6 pb-4 max-h-[calc(100vh-85px)] overflow-y-auto">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          aria-current={isActive(link.href) ? 'page' : undefined}
+          class:list={[
+            'block py-3.5 no-underline text-base font-semibold border-b border-gray-100 hover:text-navy',
+            isActive(link.href) ? 'text-navy' : 'text-gray-700',
+          ]}
+        >{link.label}</a>
+      ))}
+      <a href="/plan-your-visit" class="block text-center mt-4 text-white text-base font-semibold py-3 px-6 rounded bg-navy hover:bg-navy-dark transition-colors no-underline">Join Us for Worship</a>
     </div>
   </nav>
 
@@ -94,82 +151,83 @@ const currentYear = new Date().getFullYear();
         iconOpen.classList.toggle('hidden', open);
         iconClose.classList.toggle('hidden', !open);
         toggle.setAttribute('aria-expanded', String(open));
+        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       };
 
       toggle.addEventListener('click', () => {
         setOpen(menu.classList.contains('hidden'));
       });
 
-      // If the window is resized/rotated past the desktop breakpoint while
-      // the mobile menu is open, close it so it can't get stuck open behind
-      // the desktop nav (768px matches Tailwind's default `md:` breakpoint).
-      window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !menu.classList.contains('hidden')) {
+          setOpen(false);
+          toggle.focus();
+        }
+      });
+
+      // Close the mobile menu if the window grows past the desktop breakpoint
+      // (1280px = Tailwind's `xl:`), so it can't get stuck open.
+      window.matchMedia('(min-width: 1280px)').addEventListener('change', (e) => {
         if (e.matches) setOpen(false);
       });
     }
   </script>
 
-  <!-- MAIN HOUSING LAYER -->
-  <main class="pt-[85px] min-h-[85vh]">
+  <main id="main" class="pt-[85px] min-h-[85vh]">
     <slot />
   </main>
 
-  <!-- OFFICIAL MTZ FOOTER -->
-  <footer class="bg-gray-900 text-gray-50 pt-20 pb-8 px-6">
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 text-gray-50 pt-16 md:pt-20 pb-8 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
-      
-      <!-- Vision & Mission -->
+
       <div>
-        <h3 class="text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Our Vision & Mission</h3>
+        <h2 class="text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">{church.mission ? 'Our Vision & Mission' : 'Our Vision'}</h2>
         <p class="text-gray-400 text-sm leading-relaxed mb-4">
-          <strong class="text-gray-200">Vision:</strong> To preach the Prophetic Now Word of God that uplifts, heals and provides practical solutions for life.
+          <strong class="text-gray-200">Vision:</strong> {church.vision}
         </p>
-        <p class="text-gray-400 text-sm leading-relaxed m-0">
-          <strong class="text-gray-200">Mission:</strong> To be a christ-centered Church, carrying the manifest presence of God that permanently sets people free, to actualize their purpose and corporately fulfill kingdom assignment.
-        </p>
+        {church.mission && (
+          <p class="text-gray-400 text-sm leading-relaxed m-0">
+            <strong class="text-gray-200">Mission:</strong> {church.mission}
+          </p>
+        )}
       </div>
 
-      <!-- Service Times -->
       <div>
-        <h3 class="text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Join Us for Worship</h3>
-        <ul class="list-none p-0 m-0 text-sm leading-loose">
-          <li class="mb-3 border-b border-white/10 pb-2">
-            <strong class="text-white block">Sunday Morning Service</strong>
-            <span class="text-gray-400">09:00 AM</span>
-          </li>
-          <li class="mb-3 border-b border-white/10 pb-2">
-            <strong class="text-white block">Wednesday Midweek Service</strong>
-            <span class="text-gray-400">18:00 PM</span>
-          </li>
-          <li class="mb-3 pb-2">
-            <strong class="text-white block">Saturday Intercession</strong>
-            <span class="text-gray-400">20:30 PM</span>
-          </li>
+        <h2 class="text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Join Us for Worship</h2>
+        <ul class="list-none p-0 m-0 text-sm">
+          {services.map((s, i) => (
+            <li class:list={['py-2.5', i < services.length - 1 && 'border-b border-white/10']}>
+              <strong class="text-white block">{s.name}</strong>
+              <span class="text-gray-400">
+                {s.day}{s.time && ` · ${s.time}`}
+                {s.online && <span class="ml-2 inline-block text-[11px] font-semibold uppercase tracking-wide text-gold border border-gold/50 rounded px-1.5 py-px align-middle">Online</span>}
+              </span>
+            </li>
+          ))}
         </ul>
       </div>
 
-      <!-- Kitwe Branch Info -->
       <div>
-        <h3 class="text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Kitwe Branch Details</h3>
+        <h2 class="text-white text-lg mt-0 mb-5 font-bold uppercase tracking-wide">Kitwe Branch Details</h2>
         <p class="text-gray-400 text-sm leading-relaxed mt-0 mb-4">
           <strong class="text-gray-200 block mb-1">Branch Pastor:</strong>
-          Pastor Morgan Bwalya
+          <a href="/about" class="text-gray-400 hover:text-white underline-offset-2 hover:underline">{church.pastor}</a>
         </p>
         <p class="text-gray-400 text-sm leading-relaxed mt-0 mb-5">
           <strong class="text-gray-200 block mb-1">Location:</strong>
-          Mount Zion Christian Center, Kitwe, Zambia.
+          {church.location}
         </p>
-        <a href="tel:+260962216561" class="text-white text-base font-semibold no-underline inline-flex items-center gap-2 bg-white/5 py-2.5 px-4 rounded border border-white/10 hover:bg-white/10 transition-colors">
-          Call Us: +260 962 216 561
+        <a href={`tel:${church.phone.tel}`} class="text-white text-base font-semibold no-underline inline-flex items-center gap-2 bg-white/5 py-2.5 px-4 rounded border border-white/10 hover:bg-white/10 transition-colors">
+          Call Us: {church.phone.display}
         </a>
       </div>
 
     </div>
 
-    <!-- Copyright -->
     <div class="max-w-7xl mx-auto border-t border-white/10 pt-6 text-left text-sm text-gray-500 flex justify-between flex-wrap gap-4">
-      <p class="m-0">&copy; {currentYear} Mount Zion Christian Centre. All Rights Reserved.</p>
-      <p class="m-0">Transforming Lives to Transform the World.</p>
+      <p class="m-0">&copy; {currentYear} {church.name}. All Rights Reserved.</p>
+      <p class="m-0">{church.tagline}</p>
     </div>
   </footer>
 </body>
