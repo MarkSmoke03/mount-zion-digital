@@ -7,74 +7,90 @@ const initials = pastorProfile.name
   .split(/\s+/)
   .map((w) => w[0])
   .join('');
+
+const [leadParagraph, ...otherParagraphs] = pastorProfile.bio;
 ---
 
 <Layout
   title="About Us"
-  description="Meet Pastor Morgan Bwalya and learn about the vision of Mount Zion Christian Centre Kitwe."
+  description="Meet Pastor Morgan Bwalya, and read the vision, mission and values of Mount Zion Christian Centre Kitwe."
 >
 
   <section class="bg-gray-100 py-16 md:py-20 px-6 text-center">
-    <h1 class="text-4xl md:text-5xl mb-4 text-gray-900 font-bold">About Us</h1>
+    <h1 class="text-4xl md:text-6xl mb-4 text-gray-900 font-bold">About Us</h1>
     <p class="max-w-2xl mx-auto text-gray-600 text-lg leading-relaxed">
       A Bible-believing church in Kitwe, serving the spiritual needs of people from all walks of life.
     </p>
   </section>
 
-  <!-- MEET OUR PASTOR -->
-  <section class="max-w-5xl mx-auto my-16 md:my-20 px-6 grid grid-cols-1 md:grid-cols-[280px_1fr] gap-10 md:gap-14 items-start">
-    <div class="mx-auto md:mx-0 w-56 md:w-full">
+  <!-- PASTOR: in his own words -->
+  <section class="max-w-6xl mx-auto my-16 md:my-24 px-6 grid grid-cols-1 md:grid-cols-[300px_1fr] gap-12 md:gap-16 items-start" aria-labelledby="pastor-heading">
+    <div class="mx-auto md:mx-0 w-60 md:w-full mr-[10px]">
       {pastorProfile.photo ? (
         <img
           src={pastorProfile.photo}
-          alt={pastorProfile.name}
-          width="560"
-          height="700"
-          class="w-full h-auto aspect-[4/5] object-cover rounded-lg shadow-md"
+          alt={`${pastorProfile.name}`}
+          width="600"
+          height="750"
+          class="step-block w-full h-auto aspect-[4/5] object-cover rounded-xl border-2 border-navy-dark"
         />
       ) : (
-        <div class="w-full aspect-[4/5] rounded-lg bg-navy flex items-center justify-center shadow-md" role="img" aria-label={`Photo of ${pastorProfile.name} coming soon`}>
-          <span class="text-white/90 text-6xl font-bold tracking-wide" aria-hidden="true">{initials}</span>
+        <div class="step-block w-full aspect-[4/5] rounded-xl border-2 border-navy-dark bg-navy flex items-center justify-center" role="img" aria-label={`Portrait of ${pastorProfile.name} coming soon`}>
+          <span class="serif-heading text-gold text-7xl font-bold" aria-hidden="true">{initials}</span>
         </div>
       )}
+      <p class="mt-6 mb-0 text-center md:text-left">
+        <span class="block font-bold text-gray-900">{pastorProfile.name}</span>
+        <span class="block text-sm text-gray-500">{pastorProfile.role}</span>
+      </p>
     </div>
 
-    <div>
-      <span class="text-sm font-bold text-navy uppercase tracking-widest block mb-3">Meet Our Pastor</span>
-      <h2 class="serif-heading text-3xl md:text-4xl text-gray-900 mt-0 mb-2 font-bold">{pastorProfile.name}</h2>
-      <p class="text-gray-500 mt-0 mb-6">{pastorProfile.role}</p>
+    <div class="max-w-2xl">
+      <h2 id="pastor-heading" class="serif-heading text-4xl md:text-5xl text-gray-900 mt-0 mb-8 font-bold">Who is Morgan Bwalya?</h2>
 
-      {pastorProfile.bio.length > 0 ? (
-        pastorProfile.bio.map((para) => (
-          <p class="text-gray-700 text-lg leading-relaxed mt-0 mb-4">{para}</p>
-        ))
-      ) : (
-        <p class="text-gray-500 text-lg leading-relaxed italic m-0">
-          Pastor Morgan's full profile is coming soon.
-        </p>
+      {leadParagraph && (
+        <blockquote class="m-0 mb-6 border-l-4 border-gold pl-6">
+          <p class="serif-heading text-2xl md:text-[1.75rem] leading-snug text-navy m-0">{leadParagraph}</p>
+        </blockquote>
       )}
+      {otherParagraphs.map((para) => (
+        <p class="text-gray-700 text-lg leading-relaxed mt-0 mb-4 pl-7">{para}</p>
+      ))}
 
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/plan-your-visit" class="bg-navy hover:bg-navy-dark text-white font-semibold no-underline py-3 px-6 rounded text-[15px] transition-colors">Join Us This Sunday</a>
-        <a href="/prayer-hub" class="border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold no-underline py-2.5 px-6 rounded text-[15px] transition-colors">Send a Prayer Request</a>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a href="/plan-your-visit" class="btn-lift bg-navy hover:bg-navy-dark text-white font-semibold no-underline py-3 px-6 rounded text-[15px]">Join Us This Sunday</a>
+        <a href="/prayer-hub" class="btn-lift border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold no-underline py-2.5 px-6 rounded text-[15px]">Send a Prayer Request</a>
       </div>
     </div>
   </section>
 
-  <!-- VISION (and Mission once confirmed) -->
-  <section class="bg-gray-900 text-white py-16 md:py-20 px-6">
-    <div class:list={['mx-auto grid gap-10', church.mission ? 'max-w-5xl md:grid-cols-2' : 'max-w-3xl text-center']}>
+  <!-- VISION & MISSION -->
+  <section class="bg-navy-dark text-white py-16 md:py-24 px-6" aria-labelledby="vision-heading">
+    <h2 id="vision-heading" class="sr-only">Our vision and mission</h2>
+    <div class="max-w-6xl mx-auto grid gap-12 md:gap-16 md:grid-cols-2">
       <div>
-        <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-3">Our Vision</span>
+        <h3 class="text-sm font-bold text-gold uppercase tracking-widest m-0 mb-4">Our Vision</h3>
         <p class="serif-heading text-2xl md:text-3xl leading-snug m-0">{church.vision}</p>
       </div>
-      {church.mission && (
-        <div>
-          <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-3">Our Mission</span>
-          <p class="serif-heading text-2xl md:text-3xl leading-snug m-0">{church.mission}</p>
-        </div>
-      )}
+      <div>
+        <h3 class="text-sm font-bold text-gold uppercase tracking-widest m-0 mb-4">Our Mission</h3>
+        <p class="serif-heading text-2xl md:text-3xl leading-snug m-0">{church.mission}</p>
+      </div>
     </div>
+  </section>
+
+  <!-- VALUES: set like a creed, in Pastor Morgan's order -->
+  <section class="max-w-5xl mx-auto py-16 md:py-24 px-6 text-center" aria-labelledby="values-heading">
+    <h2 id="values-heading" class="serif-heading text-3xl md:text-5xl text-gray-900 font-bold m-0 mb-4">Our values</h2>
+    <p class="text-gray-600 text-lg m-0 mb-10 md:mb-12">What we hold to as a church family.</p>
+    <ul class="list-none p-0 m-0 flex flex-wrap justify-center items-baseline gap-x-6 md:gap-x-9 gap-y-3 md:gap-y-5">
+      {church.values.map((value) => (
+        <li class="serif-heading text-2xl md:text-4xl text-navy whitespace-nowrap">
+          <span class="text-gold text-[0.6em] align-[0.2em] mr-2 md:mr-3" aria-hidden="true">✦</span>{value}
+        </li>
+      ))}
+    </ul>
+    <p class="mt-14 md:mt-16 mb-0 text-gray-500">{church.tagline}</p>
   </section>
 
 </Layout>

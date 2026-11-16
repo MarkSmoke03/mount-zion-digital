@@ -1,0 +1,166 @@
+/*
+  Site-wide styles that Tailwind utility classes can't express on their own.
+  Imported once in Layout.astro, so these rules apply to every page
+  (unlike a <style> block inside a component, which Astro scopes to that
+  component only).
+*/
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Display serif for page titles and large section headings only. */
+h1,
+.serif-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 3px solid #c9a84c;
+  outline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------
+   Navigation: frosted glass once the page scrolls under it
+   --------------------------------------------------------------------- */
+.site-nav {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.site-nav[data-scrolled] {
+  background-color: rgb(255 255 255 / 0.82);
+  box-shadow: 0 8px 24px -12px rgb(17 34 63 / 0.25);
+}
+@supports (backdrop-filter: blur(1px)) {
+  .site-nav[data-scrolled] {
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    backdrop-filter: saturate(1.4) blur(14px);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Homepage hero: a layered Mount Zion scene drawn from the logo.
+   Back to front: congregation photo, rising sun disc, two hill arcs.
+   Layers move at different depths (see the script in Layout.astro).
+   --------------------------------------------------------------------- */
+.hero-layer {
+  will-change: transform;
+}
+
+.hero-sun {
+  /* the logo's disc, as dawn light behind the hill. "screen" makes it add
+     light to the photo beneath, instead of tinting it olive. */
+  background:
+    radial-gradient(circle at 50% 50%, rgb(255 226 160 / 0.62) 0%, rgb(222 176 82 / 0.38) 30%, rgb(201 150 60 / 0.14) 55%, transparent 70%);
+  border-radius: 9999px;
+  mix-blend-mode: screen;
+}
+.hero-sun::after {
+  /* a crisp rim, like the edge of the logo's disc */
+  content: '';
+  position: absolute;
+  inset: 15%;
+  border-radius: 9999px;
+  border: 1.5px solid rgb(255 226 160 / 0.4);
+}
+
+@keyframes sunrise {
+  from { opacity: 0; translate: 0 18%; }
+  to   { opacity: 1; translate: 0 0; }
+}
+@keyframes hero-copy-in {
+  from { opacity: 0; translate: 0 14px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+.hero-sunrise {
+  animation: sunrise 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-copy > * {
+  animation: hero-copy-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-copy > :nth-child(1) { animation-delay: 0.35s; }
+.hero-copy > :nth-child(2) { animation-delay: 0.5s; }
+.hero-copy > :nth-child(3) { animation-delay: 0.65s; }
+
+/* ---------------------------------------------------------------------
+   Tilt: clickable cards lean toward the pointer, with a soft glare.
+   Only on devices with a mouse; touch screens get a gentle press instead.
+   --------------------------------------------------------------------- */
+[data-tilt] {
+  position: relative;
+  transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(var(--lift, 0px));
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.45s ease;
+}
+[data-tilt]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 0%), rgb(255 255 255 / 0.35), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+[data-tilt][data-tilting] {
+  --lift: -4px;
+  transition: transform 0.12s linear, box-shadow 0.45s ease;
+}
+[data-tilt][data-tilting]::after {
+  opacity: 1;
+}
+@media (hover: none) {
+  [data-tilt]:active {
+    --lift: 1px;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Buttons with a little physical lift
+   --------------------------------------------------------------------- */
+.btn-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+.btn-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -8px rgb(17 34 63 / 0.45);
+}
+.btn-lift:active,
+.btn-lift:disabled {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------
+   Discipleship steps: each level is a solid block with a visible side,
+   and Equip stands a step higher than Days of Rain.
+   --------------------------------------------------------------------- */
+.step-block {
+  box-shadow:
+    10px 10px 0 0 #11223f,
+    10px 10px 0 1px #11223f,
+    0 30px 50px -20px rgb(17 34 63 / 0.45);
+}
+
+/* ---------------------------------------------------------------------
+   Respect people who ask their device for less motion.
+   --------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-sunrise,
+  .hero-copy > * {
+    animation: none;
+  }
+  .hero-layer {
+    transform: none !important;
+  }
+  [data-tilt],
+  [data-tilt][data-tilting],
+  .btn-lift,
+  .btn-lift:hover {
+    transform: none;
+    transition: none;
+  }
+  [data-tilt]::after {
+    display: none;
+  }
+}

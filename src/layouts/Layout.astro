@@ -1,5 +1,6 @@
 ---
 import { church, services } from '../data/church';
+import '../styles/global.css';
 
 interface Props {
   title: string;
@@ -64,23 +65,12 @@ const isActive = (href: string) => (href === '/' ? currentPath === '/' : current
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    /* Display serif is reserved for page titles and large section headings.
-       Everything else stays in Inter. */
-    h1, .serif-heading {
-      font-family: 'Playfair Display', serif;
-    }
-  </style>
 </head>
 <body class="m-0 p-0 bg-white text-gray-800">
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-white focus:text-navy focus:px-4 focus:py-2 focus:rounded focus:shadow">Skip to content</a>
 
   <!-- STICKY NAVIGATION -->
-  <nav class="fixed top-0 left-0 w-full bg-white shadow-sm z-50 border-b-[3px] border-navy" aria-label="Main">
+  <nav class="site-nav fixed top-0 left-0 w-full bg-white z-50 border-b-[3px] border-navy" aria-label="Main">
     <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 flex justify-between items-center gap-4">
 
       <a href="/" class="flex items-center gap-2.5 sm:gap-3 no-underline min-w-0">
@@ -170,6 +160,91 @@ const isActive = (href: string) => (href === '/' ? currentPath === '/' : current
       window.matchMedia('(min-width: 1280px)').addEventListener('change', (e) => {
         if (e.matches) setOpen(false);
       });
+    }
+  </script>
+
+  <script>
+    // Depth effects. Everything here is decoration: the page reads and works
+    // the same without it, and none of it runs for people who have asked
+    // their device for reduced motion.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    // 1. Frosted nav once content scrolls beneath it.
+    const nav = document.querySelector<HTMLElement>('.site-nav');
+    const updateNav = () => nav?.toggleAttribute('data-scrolled', window.scrollY > 8);
+    updateNav();
+    window.addEventListener('scroll', updateNav, { passive: true });
+
+    if (!reduceMotion) {
+      // 2. Hero layers drift at different speeds as you scroll (and, with a
+      //    mouse, as you move it), so the scene reads as having depth.
+      const hero = document.querySelector<HTMLElement>('[data-hero]');
+      const layers = hero
+        ? Array.from(hero.querySelectorAll<HTMLElement>('[data-depth]')).map((el) => ({
+            el,
+            depth: Number(el.dataset.depth) || 0,
+          }))
+        : [];
+
+      if (hero && layers.length) {
+        let pointerX = 0;
+        let pointerY = 0;
+        let ticking = false;
+
+        const render = () => {
+          ticking = false;
+          const scroll = Math.min(window.scrollY, hero.offsetHeight);
+          for (const { el, depth } of layers) {
+            const x = pointerX * depth * 24;
+            const y = scroll * depth * 0.5 + pointerY * depth * 16;
+            el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+          }
+        };
+        const requestRender = () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(render);
+          }
+        };
+
+        window.addEventListener('scroll', requestRender, { passive: true });
+        if (finePointer) {
+          hero.addEventListener('pointermove', (e) => {
+            const rect = hero.getBoundingClientRect();
+            pointerX = (e.clientX - rect.left) / rect.width - 0.5;
+            pointerY = (e.clientY - rect.top) / rect.height - 0.5;
+            requestRender();
+          });
+          hero.addEventListener('pointerleave', () => {
+            pointerX = 0;
+            pointerY = 0;
+            requestRender();
+          });
+        }
+      }
+
+      // 3. Clickable cards lean toward the mouse pointer (max 5 degrees).
+      if (finePointer) {
+        const MAX_TILT = 5;
+        document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+          card.addEventListener('pointermove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const px = (e.clientX - rect.left) / rect.width;
+            const py = (e.clientY - rect.top) / rect.height;
+            card.setAttribute('data-tilting', '');
+            card.style.setProperty('--tilt-y', `${((px - 0.5) * 2 * MAX_TILT).toFixed(2)}deg`);
+            card.style.setProperty('--tilt-x', `${((0.5 - py) * 2 * MAX_TILT).toFixed(2)}deg`);
+            card.style.setProperty('--glare-x', `${(px * 100).toFixed(1)}%`);
+            card.style.setProperty('--glare-y', `${(py * 100).toFixed(1)}%`);
+          });
+          card.addEventListener('pointerleave', () => {
+            card.removeAttribute('data-tilting');
+            card.style.setProperty('--tilt-x', '0deg');
+            card.style.setProperty('--tilt-y', '0deg');
+          });
+        });
+      }
     }
   </script>
 

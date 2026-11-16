@@ -1,59 +1,67 @@
-# Review Notes – pre-launch pass (October 2026)
+# Review Notes
 
-## Still waiting on Pastor Morgan
+## Where things live
 
-All of these live in one file: `src/data/church.ts`.
+- **`src/data/church.ts`**: every church detail shown on the site: vision, mission,
+  values, tagline, service times, discipleship levels, contacts and the pastor's
+  profile. Change a detail there and it updates on every page.
+- **`src/styles/global.css`**: site-wide styles that utilities can't express: heading
+  font, the homepage hero scene, card tilt, the discipleship "step" blocks, and the
+  reduced-motion rules.
+- **`tailwind.config.mjs`**: brand colours (`navy`, `navy-dark`, `gold`, `gold-dark`)
+  and the two layered shadows (`shadow-depth`, `shadow-lift`).
 
-1. **Mission statement** – `church.mission` is empty, so the Mission line is hidden
-   in the footer and on the About page. Paste the wording in and it appears everywhere.
-2. **PLUG & Discipleship schedule** – shown without a time. Add a day/time to `plug`
-   once confirmed.
-3. **Pastor bio and photo** – `pastorProfile.bio` (one string per paragraph) and
-   `pastorProfile.photo` (e.g. `/images/pastor-morgan.jpg`). Until then the About page
-   shows his initials and "profile coming soon".
-4. **Prayer request WhatsApp number** – `prayer-hub.astro` sends to 260962219190,
-   while the site's call number is +260 962 216 561. Confirm which is right.
-5. **Domain** – `site` in `astro.config.mjs` is the Netlify address for now. Change it
+## Still needed from Pastor Morgan
+
+1. **Photo** for the About page: a portrait about 800px wide, saved as
+   `public/images/pastor-morgan.jpg`, then set `pastorProfile.photo` in `church.ts`.
+   Until then the page shows his initials.
+2. **Prayer request WhatsApp number**: `prayer-hub.astro` sends to 260962219190, while
+   the site's call number is +260 962 216 561. Confirm which is right.
+3. **Domain**: `site` in `astro.config.mjs` is the Netlify address for now. Change it
    when the real domain is live; the QR code and link previews follow automatically.
-6. **Children's photos** – confirm parents are happy with the Next Generation photo.
+4. **Children's photos**: confirm parents are happy with the Next Generation photo.
+5. **PLUG**: Pastor's reply described the two discipleship levels under the heading
+   "PLUG & Discipleship", but not what PLUG itself is or when it meets.
 
-## What changed in this pass
+## November 2026 pass
 
-**Pastor's corrections**
-- Removed the Garage (Youth) 11:30 service.
-- "Emerging Generation" renamed "Next Generation".
-- Saturday Intercession and the new Sunday 20:00 prayer marked Online.
-- Vision now shows the correct statement (it was labelled Mission before).
-- PLUG time removed until confirmed; it now links to the Connect form instead.
+**Pastor Morgan's information (his exact wording)**
+- Vision, Mission and the ten Values on the new About page and in the footer.
+- Tagline: "Transforming lives to transform the world."
+- PLUG & Discipleship section on Get Connected (`/ministries#discipleship`):
+  Days of Rain (level 1) and Equip (level 2). Plan Your Visit and the Spiritual
+  Foundation card link to it.
+- "Who is Morgan Bwalya?" profile in his own words on the About page.
 
-**Structure**
-- `src/data/church.ts` is the single source for service times, vision/mission,
-  contacts and the pastor profile. The footer and Plan Your Visit page used to
-  list services separately and had drifted apart.
-- New **About** page (`/about`) with Meet Our Pastor and the Vision. Added to the
-  nav; the homepage "Learn More About Us" button now goes there.
-- New **404** page.
+**Depth and motion**
+- Homepage hero is a layered Mount Zion scene taken from the logo: congregation photo
+  at the back, a rising sun disc in the middle, the logo's hill arcs in front. Layers
+  move at different speeds on scroll (and with the mouse on desktop). The sun rises
+  once on load.
+- Service times sit on a card that overlaps the bottom of the hero.
+- Navigation turns to frosted glass when content scrolls under it.
+- Layered navy-tinted shadows replace flat grey ones.
+- Ministry cards and the homepage poster tilt toward the mouse (max 5°, mouse only).
+- Discipleship levels are drawn as solid blocks, with Equip standing a step higher.
+- No libraries: about 2 KB of script. People who set "reduce motion" on their device
+  get a still page, and everything works without JavaScript.
 
-**Mobile and layout fixes**
-- Ministry cards no longer overflow phone screens (the grid minimum was wider than
-  most phones).
-- Desktop nav now only appears from 1280px; below that the menu button is used,
-  so links no longer squash on tablets and small laptops. Escape closes the menu.
-- Nav shows only the logo mark; the full logo's small text was unreadable at 48px.
-- Homepage hero title scales down on phones; QR code is hidden on phones (you can't
-  scan your own screen) and the button now reads "Fill in the Connect form" instead
-  of showing a raw URL.
-- Partner page shows the payment details first, poster beside them; copy buttons
-  fall back gracefully on older phones.
-- Prayer form says it opens WhatsApp. Form fields support phone autofill.
-- Plan Your Visit phone number is tappable and there's an "Open in Google Maps" link.
-- Times use one format everywhere (24-hour, e.g. 18:00), matching how Pastor writes them.
+**Fixes**
+- The Playfair Display heading font had never applied: the rule was in a scoped
+  `<style>` block in the layout, which Astro limits to the layout's own elements.
+  It now lives in `global.css`, so headings show in Playfair as intended.
+- Service card on phones no longer wraps "Wednesday 18:00" awkwardly.
+- Ministry cards say "Learn more" / "Show less" instead of "Tap to…" on desktop.
+- Discipleship lists keep their bullets and numbers.
 
-**Launch basics**
-- Photos resized and compressed: ~6.6 MB → ~0.9 MB total. Phone metadata
-  (including GPS location) stripped.
-- Favicon and home-screen icon from the logo mark.
-- Page titles and descriptions on every page; Open Graph tags so WhatsApp and
-  Facebook show a proper preview card (`og-share.jpg`, `og-partner.jpg`).
-- Accessibility: skip link, titled iframes, consistent heading order, active page
-  marked in the nav.
+## Checks run
+
+- Strict TypeScript on every page's frontmatter, the data file and each client script.
+- Every image reference resolves; every internal link and `#anchor` resolves; no
+  skipped heading levels.
+- Every page rendered and screenshotted at 390px, 820px and 1440px: no sideways
+  scrolling, no script errors. Tilt, accordion, parallax, glass nav, phone menu and
+  reduced motion tested in Chromium.
+- The screenshots used a local stand-in renderer (Astro can't be installed in the
+  review sandbox); the real build runs on Netlify.
