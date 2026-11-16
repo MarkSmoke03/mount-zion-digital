@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import QRCode from '../components/QRCode.astro';
+import { church, services } from '../data/church';
 
 // Astro.site comes from the `site` value in astro.config.mjs.
 const connectUrl = new URL('/connect', Astro.site);
@@ -8,35 +9,83 @@ const connectUrl = new URL('/connect', Astro.site);
 
 <Layout title="Home">
   
-  <!-- OFFICIAL MTZ HERO SECTION -->
-  <section class="relative h-[80vh] min-h-[600px] w-full flex items-center justify-center bg-gray-900">
-    
-    <img
-      src="/images/hero-congregation.jpg"
-      alt="Mount Zion Kitwe Congregation"
-      class="absolute inset-0 w-full h-full object-cover object-[center_30%] z-0 opacity-40"
-    />
+  <!-- HERO: a layered Mount Zion scene drawn from the logo.
+       Back to front: congregation photo, rising sun disc, hill arcs.
+       data-depth sets how far each layer drifts (script in Layout.astro). -->
+  <section
+    data-hero
+    class="relative isolate overflow-hidden bg-navy-dark flex items-center justify-center min-h-[600px] h-[calc(100svh-85px)] max-h-[860px] pb-28 md:pb-36"
+  >
+    <div class="hero-layer absolute inset-x-0 -top-[8%] h-[116%] -z-30" data-depth="0.35" aria-hidden="true">
+      <img
+        src="/images/hero-congregation.jpg"
+        alt=""
+        width="1920"
+        height="1062"
+        fetchpriority="high"
+        class="w-full h-full object-cover object-[center_30%] opacity-40"
+      />
+    </div>
+    <div class="absolute inset-0 -z-20 bg-gradient-to-b from-navy-dark/80 via-navy-dark/45 to-navy-dark/95" aria-hidden="true"></div>
 
-    <div class="relative z-10 max-w-4xl text-center px-6">
-      <h1 class="text-5xl md:text-6xl lg:text-[72px] font-bold mb-5 leading-tight text-white">
-        Transforming Lives to<br/>Transform the World.
+    <div class="hero-layer absolute inset-0 -z-10 pointer-events-none" data-depth="0.12" aria-hidden="true">
+      <!-- outer div positions the disc; inner div animates, so the two never fight -->
+      <div class="absolute left-1/2 bottom-0 w-[min(150vw,980px)] aspect-square -translate-x-1/2 translate-y-[42%]">
+        <div class="hero-sun hero-sunrise relative w-full h-full"></div>
+      </div>
+    </div>
+
+    <svg
+      class="absolute inset-x-0 bottom-0 w-full h-[110px] md:h-[170px] -z-[5] pointer-events-none"
+      viewBox="0 0 1440 200"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M0 150 C 360 30, 1080 30, 1440 150" fill="none" stroke="rgb(255 236 186 / 0.45)" stroke-width="3" vector-effect="non-scaling-stroke" />
+      <path d="M0 200 L0 190 C 380 70, 1060 70, 1440 190 L1440 200 Z" fill="#ffffff" />
+    </svg>
+
+    <div class="hero-copy relative max-w-4xl text-center px-6">
+      <h1 class="text-[2.6rem] leading-[1.08] sm:text-6xl md:text-7xl lg:text-[84px] font-bold mb-6 text-white">
+        Transforming lives to<br class="hidden sm:block" /> transform the world.
       </h1>
-      <p class="font-sans text-lg md:text-xl font-normal max-w-2xl mx-auto mb-10 leading-relaxed text-gray-300">
-        A dynamic bible believing church serving the spiritual needs of people from all walks of life. Under the leadership of Pastor Morgan Bwalya, join us in Kitwe to experience the manifest presence of God.
+      <p class="text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed text-gray-200">
+        A Bible-believing church serving the spiritual needs of people from all walks of life. Under the leadership of Pastor Morgan Bwalya, join us in Kitwe to experience the manifest presence of God.
       </p>
       <div class="flex gap-4 justify-center flex-wrap">
-        <a href="/plan-your-visit" class="bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px] transition-colors">
+        <a href="/plan-your-visit" class="btn-lift bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px]">
           Join Us This Sunday
         </a>
-        <a href="/ministries" class="bg-transparent hover:bg-white/10 text-white border-2 border-white font-semibold no-underline py-3 px-7 rounded text-[15px] transition-colors">
+        <a href="/about" class="btn-lift bg-white/5 hover:bg-white/15 text-white border-2 border-white/80 font-semibold no-underline py-3 px-7 rounded text-[15px]">
           Learn More About Us
         </a>
       </div>
     </div>
   </section>
 
+  <!-- SERVICE TIMES: a card that rises over the hill -->
+  <section class="relative z-20 -mt-20 md:-mt-24 px-4 sm:px-6" aria-labelledby="service-times-heading">
+    <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-lift border border-gray-100 p-6 md:p-8 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+      <div>
+        <h2 id="service-times-heading" class="text-sm font-semibold text-gray-500 m-0 mb-4">This week at Mount Zion Kitwe</h2>
+        <ul class="list-none p-0 m-0 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5">
+          {services.map((s) => (
+            <li>
+              <p class="m-0 text-sm font-semibold text-gray-500">{s.day}</p>
+              <p class="m-0 text-3xl font-bold text-navy leading-tight tabular-nums">{s.time}</p>
+              <p class="m-0 mt-1 text-sm text-gray-700">{s.name}{s.online && <span class="ml-1.5 text-xs font-semibold text-gold-dark">Online</span>}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <a href="/plan-your-visit" class="btn-lift justify-self-start lg:justify-self-end bg-navy hover:bg-navy-dark text-white font-semibold no-underline py-3 px-6 rounded text-[15px] whitespace-nowrap">
+        Plan your visit
+      </a>
+    </div>
+  </section>
+
   <!-- A CHURCH THAT FEELS LIKE HOME -->
-  <section class="max-w-7xl mx-auto my-24 px-6 text-center">
+  <section class="max-w-7xl mx-auto mt-20 mb-16 md:mt-28 md:mb-24 px-6 text-center">
     <span class="text-sm font-bold text-navy uppercase tracking-widest block mb-4">
       Welcome to the Family
     </span>
@@ -49,13 +98,13 @@ const connectUrl = new URL('/connect', Astro.site);
     
     <!-- Core Scriptures Block -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16 text-left">
-      <div class="bg-gray-50 p-10 rounded-lg border-l-4 border-navy">
+      <div class="bg-white shadow-depth p-6 md:p-10 rounded-lg border-l-4 border-navy">
         <h3 class="text-xl text-gray-900 mt-0 mb-4 font-bold">Hebrews 12:22-24</h3>
         <p class="text-gray-600 italic leading-relaxed m-0 text-[15px]">
           "But you have come to Mount Zion and to the city of the living God, the heavenly Jerusalem... to the general assembly and the church of the firstborn who are registered in heaven."
         </p>
       </div>
-      <div class="bg-gray-50 p-10 rounded-lg border-l-4 border-navy">
+      <div class="bg-white shadow-depth p-6 md:p-10 rounded-lg border-l-4 border-navy">
         <h3 class="text-xl text-gray-900 mt-0 mb-4 font-bold">Obadiah 1:17</h3>
         <p class="text-gray-600 italic leading-relaxed m-0 text-[15px]">
           "But on Mount Zion there shall be deliverance, And there shall be holiness; The house of Jacob shall possess their possessions."
@@ -65,25 +114,27 @@ const connectUrl = new URL('/connect', Astro.site);
   </section>
 
   <!-- LIVE WORSHIP HUB -->
-  <section class="bg-gray-100 py-24 px-6">
+  <section class="bg-gray-100 py-16 md:py-24 px-6">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
       <div>
-        <h2 class="serif-heading text-4xl text-gray-900 m-0 mb-5 font-bold leading-tight">
+        <h2 class="serif-heading text-3xl md:text-4xl text-gray-900 m-0 mb-5 font-bold leading-tight">
           Experience powerful, life-changing messages from God's Word.
         </h2>
         <p class="text-gray-600 text-base leading-relaxed mb-8">
           Feed your spirit with the Prophetic Now Word. We stream our Kitwe branch services live to equip believers educationally, politically, economically, and spiritually.
         </p>
-        <a href="https://web.facebook.com/profile.php?id=100079471674687" target="_blank" rel="noopener noreferrer" class="inline-block bg-navy hover:bg-navy-dark text-white py-3.5 px-7 rounded no-underline font-semibold text-sm transition-colors">
+        <a href={church.facebookUrl} target="_blank" rel="noopener noreferrer" class="btn-lift inline-block bg-navy hover:bg-navy-dark text-white py-3.5 px-7 rounded no-underline font-semibold text-sm">
           Watch Latest Sermons
         </a>
       </div>
 
       <!-- Refined Iframe Target -->
-      <div class="bg-white p-5 rounded-lg shadow-xl flex flex-col justify-center items-center w-full">
+      <div class="bg-white p-3 sm:p-5 rounded-lg shadow-lift flex flex-col justify-center items-center w-full">
         <!-- Max-width matches Facebook's standard 500px rendering limit -->
         <div class="w-full max-w-[500px] flex justify-center overflow-hidden rounded">
-          <iframe 
+          <iframe
+            title="Mount Zion Christian Centre Kitwe on Facebook"
+            loading="lazy"
             src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fweb.facebook.com%2Fprofile.php%3Fid%3D100079471674687&tabs=timeline&width=500&height=500&small_header=true&adapt_container_width=true&hide_cover=true&show_facepile=false" 
             width="500"
             height="500"
@@ -95,54 +146,56 @@ const connectUrl = new URL('/connect', Astro.site);
           </iframe>
         </div>
         <p class="text-sm text-gray-500 text-center mt-3 mb-0">
-          Not loading? <a href="https://web.facebook.com/profile.php?id=100079471674687" target="_blank" rel="noopener noreferrer" class="text-navy hover:underline font-medium">Visit our Facebook Page directly →</a>
+          Not loading? <a href={church.facebookUrl} target="_blank" rel="noopener noreferrer" class="text-navy hover:underline font-medium">Visit our Facebook Page directly →</a>
         </p>
       </div>
     </div>
   </section>
 
   <!-- STAY CONNECTED / QR -->
-  <section class="max-w-7xl mx-auto my-24 px-6">
-    <div class="bg-gray-900 rounded-2xl px-8 py-16 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+  <section class="max-w-7xl mx-auto my-16 md:my-24 px-6">
+    <div class="bg-gray-900 rounded-2xl shadow-lift px-6 py-12 md:px-16 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
       <div>
         <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-4">
           New Here?
         </span>
-        <h2 class="serif-heading text-4xl text-white mb-5 font-bold leading-tight">
+        <h2 class="serif-heading text-3xl md:text-4xl text-white mb-5 font-bold leading-tight">
           Let's get you connected.
         </h2>
         <p class="text-gray-300 text-lg leading-relaxed mb-8 max-w-md">
-          Scan the code, or follow the link, and tell us a little about yourself. Someone from the Mount Zion family will reach out.
+          Scan the code, or tap the button, and tell us a little about yourself. Someone from the Mount Zion family will reach out.
         </p>
-        <a href="/connect" class="inline-block bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px] transition-colors">
-          {connectUrl.href}
+        <a href="/connect" class="btn-lift inline-block bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px]">
+          Fill in the Connect form →
         </a>
       </div>
-      <div class="flex justify-center md:justify-end">
+      <div class="hidden md:flex justify-center md:justify-end">
         <QRCode url={connectUrl.href} caption="Scan to open Connect With Us" size={200} />
       </div>
     </div>
   </section>
 
   <!-- PARTNER WITH US / LAND PROJECT -->
-  <section class="max-w-7xl mx-auto my-24 px-6">
-    <div class="bg-navy rounded-2xl px-8 py-16 md:px-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+  <section class="max-w-7xl mx-auto my-16 md:my-24 px-6">
+    <div class="bg-navy rounded-2xl shadow-lift px-6 py-12 md:px-16 md:py-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
       <div>
         <span class="text-sm font-bold text-gold uppercase tracking-widest block mb-4">
           Church Land Project
         </span>
-        <h2 class="serif-heading text-4xl text-white mb-5 font-bold leading-tight">
+        <h2 class="serif-heading text-3xl md:text-4xl text-white mb-5 font-bold leading-tight">
           Partner with us.
         </h2>
         <p class="text-gray-300 text-lg leading-relaxed mb-8 max-w-md">
           The Lord has placed it upon our hearts to build Him a house. Join us in the purchase of land for this purpose and be part of the blessing.
         </p>
-        <a href="/partner" class="inline-block bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px] transition-colors">
+        <a href="/partner" class="btn-lift inline-block bg-white hover:bg-gray-100 text-gray-900 font-semibold no-underline py-3.5 px-8 rounded text-[15px]">
           Learn how to partner →
         </a>
       </div>
       <div class="flex justify-center md:justify-end">
-        <img src="/images/partner-land-project.jpg" alt="Church Land Project" class="rounded-lg shadow-lg max-w-[280px] w-full" />
+        <a href="/partner" data-tilt class="block rounded-lg shadow-lift max-w-[240px] md:max-w-[280px] w-full">
+          <img src="/images/partner-land-project.jpg" alt="Church Land Project poster: partner with us" loading="lazy" decoding="async" width="864" height="1080" class="block rounded-lg w-full h-auto" />
+        </a>
       </div>
     </div>
   </section>
